@@ -55,6 +55,28 @@ body {
 h1 { margin-bottom: 10px; }
 .subtitle { color: var(--accent-color); margin-bottom: 30px; }
 
+.mode-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.mode-btn {
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    border: 1px solid var(--input-border);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+.mode-btn.active {
+    background-color: var(--button-bg);
+    color: white;
+    border-color: var(--button-bg);
+}
+
 /* Upload Area */
 .upload-area {
     border: 3px dashed var(--input-border);
@@ -75,12 +97,28 @@ h1 { margin-bottom: 10px; }
     max-width: 100%;
     border-radius: 10px;
     display: none;
-    margin-top: 10px;
+    margin: 10px auto;
+}
+
+/* Webcam Area */
+#webcam-container {
+    margin: 20px auto;
+    border-radius: 15px;
+    overflow: hidden;
+    width: 200px;
+    height: 200px;
+    background: #000;
+    display: none;
+}
+
+#webcam-container canvas {
+    border-radius: 15px;
 }
 
 /* Results */
 .result-container {
     margin-top: 20px;
+    min-height: 100px;
 }
 
 .result-bar-wrapper {
@@ -104,7 +142,7 @@ h1 { margin-bottom: 10px; }
 .bar-fill {
     height: 100%;
     width: 0%;
-    transition: width 0.5s ease-out;
+    transition: width 0.2s ease-out;
 }
 
 .dog-bar { background-color: #ffca28; }

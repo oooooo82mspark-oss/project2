@@ -15,12 +15,26 @@
     <h1>🐶 Animal Face Test 🐱</h1>
     <p class="subtitle">Am I a dog or a cat? Check your animal face type!</p>
     
-    <div class="upload-area" onclick="document.getElementById('file-input').click()">
-      <div id="upload-label">
-        <p>📸 Click or drag to upload your photo</p>
+    <div class="mode-toggle">
+      <button id="btn-upload" class="mode-btn active">📁 Upload Photo</button>
+      <button id="btn-webcam" class="mode-btn">🎥 Use Webcam</button>
+    </div>
+
+    <!-- Upload Section -->
+    <div id="upload-section">
+      <div class="upload-area" onclick="document.getElementById('file-input').click()">
+        <div id="upload-label">
+          <p>📸 Click or drag to upload your photo</p>
+        </div>
+        <img id="face-image" src="#" alt="your face" />
+        <input type='file' id="file-input" style="display:none;" onchange="readURL(this);" accept="image/*" />
       </div>
-      <img id="face-image" src="#" alt="your face" />
-      <input type='file' id="file-input" style="display:none;" onchange="readURL(this);" accept="image/*" />
+    </div>
+
+    <!-- Webcam Section -->
+    <div id="webcam-section" style="display:none;">
+      <div id="webcam-container"></div>
+      <button id="webcam-control-btn">Start Webcam</button>
     </div>
 
     <div id="loading" style="display:none;">Analyzing...</div>
@@ -67,7 +81,8 @@
 
   <script>
     const URL = "https://teachablemachine.withgoogle.com/models/dQxVSjCDx/";
-    let model, labelContainer, maxPredictions;
+    let model, webcam, labelContainer, maxPredictions;
+    let isWebcamRunning = false;
 
     // Load the image model
     async function init() {
@@ -77,10 +92,12 @@
       maxPredictions = model.getTotalClasses();
     }
 
-    async function predict() {
-      const image = document.getElementById("face-image");
-      const prediction = await model.predict(image);
-      
+    async function predict(inputSource) {
+      const prediction = await model.predict(inputSource || document.getElementById("face-image"));
+      displayResults(prediction);
+    }
+
+    function displayResults(prediction) {
       const resultContainer = document.getElementById("label-container");
       resultContainer.innerHTML = '';
       
@@ -110,6 +127,43 @@
       }
     }
 
+    // Webcam Logic
+    async function setupWebcam() {
+      const flip = true; 
+      webcam = new tmImage.Webcam(200, 200, flip); 
+      await webcam.setup(); 
+      await webcam.play();
+      window.requestAnimationFrame(loop);
+
+      document.getElementById("webcam-container").appendChild(webcam.canvas);
+      document.getElementById("webcam-container").style.display = "block";
+    }
+
+    async function loop() {
+      if (!isWebcamRunning) return;
+      webcam.update(); 
+      await predict(webcam.canvas);
+      window.requestAnimationFrame(loop);
+    }
+
+    async function toggleWebcam() {
+      const btn = document.getElementById("webcam-control-btn");
+      if (!isWebcamRunning) {
+        btn.innerText = "Loading...";
+        await setupWebcam();
+        isWebcamRunning = true;
+        btn.innerText = "Stop Webcam";
+      } else {
+        isWebcamRunning = false;
+        webcam.stop();
+        document.getElementById("webcam-container").innerHTML = "";
+        document.getElementById("webcam-container").style.display = "none";
+        btn.innerText = "Start Webcam";
+        document.getElementById("result-message").innerText = "";
+        document.getElementById("label-container").innerHTML = "";
+      }
+    }
+
     function readURL(input) {
       if (input.files && input.files[0]) {
         var reader = new FileReader();
@@ -130,6 +184,33 @@
 
     document.addEventListener('DOMContentLoaded', (event) => {
       init();
+
+      // Mode toggle logic
+      const btnUpload = document.getElementById('btn-upload');
+      const btnWebcam = document.getElementById('btn-webcam');
+      const uploadSection = document.getElementById('upload-section');
+      const webcamSection = document.getElementById('webcam-section');
+
+      btnUpload.addEventListener('click', () => {
+        if (isWebcamRunning) toggleWebcam();
+        btnUpload.classList.add('active');
+        btnWebcam.classList.remove('active');
+        uploadSection.style.display = 'block';
+        webcamSection.style.display = 'none';
+        document.getElementById("result-message").innerText = "";
+        document.getElementById("label-container").innerHTML = "";
+      });
+
+      btnWebcam.addEventListener('click', () => {
+        btnWebcam.classList.add('active');
+        btnUpload.classList.remove('active');
+        uploadSection.style.display = 'none';
+        webcamSection.style.display = 'block';
+        document.getElementById("result-message").innerText = "";
+        document.getElementById("label-container").innerHTML = "";
+      });
+
+      document.getElementById("webcam-control-btn").addEventListener('click', toggleWebcam);
 
       // Theme toggle logic
       const themeToggle = document.getElementById('theme-toggle');
