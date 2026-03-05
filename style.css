@@ -1,3 +1,21 @@
+:root {
+    --bg-color: #f0f0f0;
+    --text-color: #333;
+    --lotto-bg: #4CAF50;
+    --lotto-text: white;
+    --button-bg: #e0e0e0;
+    --button-text: #000;
+}
+
+.dark-mode {
+    --bg-color: #1a1a1a;
+    --text-color: #f0f0f0;
+    --lotto-bg: #2e7d32;
+    --lotto-text: #fff;
+    --button-bg: #333;
+    --button-text: #fff;
+}
+
 body {
     font-family: sans-serif;
     display: flex;
@@ -5,7 +23,9 @@ body {
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    background-color: #f0f0f0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
 }
 
 #lotto-numbers {
@@ -18,17 +38,34 @@ body {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background-color: #4CAF50;
-    color: white;
+    background-color: var(--lotto-bg);
+    color: var(--lotto-text);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 24px;
     font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
 }
 
 button {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#theme-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
 }

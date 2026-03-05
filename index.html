@@ -7,13 +7,35 @@
   <link href='style.css' rel='stylesheet'>
 </head>
 <body>
+  <button id="theme-toggle">🌙 Dark Mode</button>
+  
   <h1>🔮 Lotto Number Generator 🔮</h1>
   <p>Click the button to get your lucky numbers!</p>
+  
   <div id="lotto-numbers"></div>
-  <button id="generate-btn">Generate Numbers</button>
+  
+  <div class="controls">
+    <button id="generate-btn">Generate Numbers</button>
+  </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', (event) => {
+      const body = document.body;
+      const themeToggle = document.getElementById('theme-toggle');
+      const generateBtn = document.getElementById('generate-btn');
+      const lottoNumbersDiv = document.getElementById('lotto-numbers');
+
+      // Theme toggle logic
+      themeToggle.addEventListener('click', () => {
+        body.classList.toggle('dark-mode');
+        if (body.classList.contains('dark-mode')) {
+          themeToggle.textContent = '☀️ White Mode';
+        } else {
+          themeToggle.textContent = '🌙 Dark Mode';
+        }
+      });
+
+      // Lotto generation logic
       function generateLottoNumbers() {
         const numbers = new Set();
         while(numbers.size < 6) {
@@ -21,7 +43,6 @@
           numbers.add(randomNumber);
         }
         
-        const lottoNumbersDiv = document.getElementById('lotto-numbers');
         lottoNumbersDiv.innerHTML = ''; 
         
         Array.from(numbers).sort((a,b) => a-b).forEach(number => {
@@ -32,7 +53,6 @@
         });
       }
 
-      const generateBtn = document.getElementById('generate-btn');
       generateBtn.addEventListener('click', generateLottoNumbers);
     });
   </script>
