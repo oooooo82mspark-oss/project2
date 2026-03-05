@@ -3,20 +3,40 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lotto Number Generator</title>
+  <title>Animal Face Test - Dog or Cat?</title>
   <link href='style.css' rel='stylesheet'>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
 </head>
 <body>
   <button id="theme-toggle">🌙 Dark Mode</button>
   
-  <h1>🔮 Lotto Number Generator 🔮</h1>
-  <p>Click the button to get your lucky numbers!</p>
-  
-  <div id="lotto-numbers"></div>
-  
-  <div class="controls">
-    <button id="generate-btn">Generate Numbers</button>
+  <div class="container">
+    <h1>🐶 Animal Face Test 🐱</h1>
+    <p class="subtitle">Am I a dog or a cat? Check your animal face type!</p>
+    
+    <div class="upload-area" onclick="document.getElementById('file-input').click()">
+      <div id="upload-label">
+        <p>📸 Click or drag to upload your photo</p>
+      </div>
+      <img id="face-image" src="#" alt="your face" />
+      <input type='file' id="file-input" style="display:none;" onchange="readURL(this);" accept="image/*" />
+    </div>
+
+    <div id="loading" style="display:none;">Analyzing...</div>
+
+    <div id="result-message" style="font-size: 1.5rem; font-weight: bold; margin: 20px 0;"></div>
+    
+    <div class="result-container" id="label-container">
+      <!-- Result bars will be injected here -->
+    </div>
   </div>
+
+  <section class="lotto-section">
+    <h3>🔮 Bonus: Lucky Lotto Numbers</h3>
+    <div id="lotto-numbers"></div>
+    <button id="generate-btn">Generate Numbers</button>
+  </section>
 
   <section class="contact-section">
     <h2>🤝 Partnership Inquiry</h2>
@@ -36,61 +56,101 @@
   <section class="comments-section">
     <div id="disqus_thread"></div>
     <script>
-        /**
-        *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-        *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
-        /*
-        var disqus_config = function () {
-        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-        };
-        */
-        (function() { // DON'T EDIT BELOW THIS LINE
+        (function() { 
         var d = document, s = d.createElement('script');
         s.src = 'https://productbuilder-c4pzu0tqz8.disqus.com/embed.js';
         s.setAttribute('data-timestamp', +new Date());
         (d.head || d.body).appendChild(s);
         })();
     </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
   </section>
 
   <script>
+    const URL = "https://teachablemachine.withgoogle.com/models/dQxVSjCDx/";
+    let model, labelContainer, maxPredictions;
+
+    // Load the image model
+    async function init() {
+      const modelURL = URL + "model.json";
+      const metadataURL = URL + "metadata.json";
+      model = await tmImage.load(modelURL, metadataURL);
+      maxPredictions = model.getTotalClasses();
+    }
+
+    async function predict() {
+      const image = document.getElementById("face-image");
+      const prediction = await model.predict(image);
+      
+      const resultContainer = document.getElementById("label-container");
+      resultContainer.innerHTML = '';
+      
+      prediction.sort((a, b) => b.probability - a.probability);
+      
+      document.getElementById("result-message").innerText = `You look like a ${prediction[0].className}!`;
+
+      for (let i = 0; i < maxPredictions; i++) {
+        const classPrediction = prediction[i].className;
+        const probability = (prediction[i].probability * 100).toFixed(0);
+        
+        const barWrapper = document.createElement("div");
+        barWrapper.className = "result-bar-wrapper";
+        
+        const colorClass = classPrediction.toLowerCase() === 'dog' ? 'dog-bar' : 'cat-bar';
+        
+        barWrapper.innerHTML = `
+          <div class="label-container">
+            <span>${classPrediction}</span>
+            <span>${probability}%</span>
+          </div>
+          <div class="bar-bg">
+            <div class="bar-fill ${colorClass}" style="width: ${probability}%"></div>
+          </div>
+        `;
+        resultContainer.appendChild(barWrapper);
+      }
+    }
+
+    function readURL(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          const img = document.getElementById('face-image');
+          img.src = e.target.result;
+          img.style.display = 'block';
+          document.getElementById('upload-label').style.display = 'none';
+          
+          document.getElementById('loading').style.display = 'block';
+          predict().then(() => {
+            document.getElementById('loading').style.display = 'none';
+          });
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', (event) => {
-      const body = document.body;
-      const themeToggle = document.getElementById('theme-toggle');
-      const generateBtn = document.getElementById('generate-btn');
-      const lottoNumbersDiv = document.getElementById('lotto-numbers');
+      init();
 
       // Theme toggle logic
+      const themeToggle = document.getElementById('theme-toggle');
       themeToggle.addEventListener('click', () => {
-        body.classList.toggle('dark-mode');
-        if (body.classList.contains('dark-mode')) {
-          themeToggle.textContent = '☀️ White Mode';
-        } else {
-          themeToggle.textContent = '🌙 Dark Mode';
-        }
+        document.body.classList.toggle('dark-mode');
+        themeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️ White Mode' : '🌙 Dark Mode';
       });
 
-      // Lotto generation logic
-      function generateLottoNumbers() {
+      // Lotto logic
+      const generateBtn = document.getElementById('generate-btn');
+      generateBtn.addEventListener('click', () => {
         const numbers = new Set();
-        while(numbers.size < 6) {
-          const randomNumber = Math.floor(Math.random() * 45) + 1;
-          numbers.add(randomNumber);
-        }
-        
-        lottoNumbersDiv.innerHTML = ''; 
-        
-        Array.from(numbers).sort((a,b) => a-b).forEach(number => {
-          const numberSpan = document.createElement('span');
-          numberSpan.textContent = number;
-          numberSpan.className = 'lotto-number';
-          lottoNumbersDiv.appendChild(numberSpan);
+        while(numbers.size < 6) { numbers.add(Math.floor(Math.random() * 45) + 1); }
+        const div = document.getElementById('lotto-numbers');
+        div.innerHTML = ''; 
+        Array.from(numbers).sort((a,b) => a-b).forEach(n => {
+          const s = document.createElement('span');
+          s.textContent = n; s.className = 'lotto-number';
+          div.appendChild(s);
         });
-      }
-
-      generateBtn.addEventListener('click', generateLottoNumbers);
+      });
     });
   </script>
 </body>
