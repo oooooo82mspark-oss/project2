@@ -3,12 +3,38 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hello World</title>
-  <link href='/style.css' rel='stylesheet'>
+  <title>Lotto Number Generator</title>
+  <link href='style.css' rel='stylesheet'>
 </head>
 <body>
-  <h1>Hello, world!</h1>
-  <button onclick="console.log('hello');">Press me</button>
-  <script defer type="text/javascript" src="/main.js"></script>
+  <h1>🔮 Lotto Number Generator 🔮</h1>
+  <p>Click the button to get your lucky numbers!</p>
+  <div id="lotto-numbers"></div>
+  <button id="generate-btn">Generate Numbers</button>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      function generateLottoNumbers() {
+        const numbers = new Set();
+        while(numbers.size < 6) {
+          const randomNumber = Math.floor(Math.random() * 45) + 1;
+          numbers.add(randomNumber);
+        }
+        
+        const lottoNumbersDiv = document.getElementById('lotto-numbers');
+        lottoNumbersDiv.innerHTML = ''; 
+        
+        Array.from(numbers).sort((a,b) => a-b).forEach(number => {
+          const numberSpan = document.createElement('span');
+          numberSpan.textContent = number;
+          numberSpan.className = 'lotto-number';
+          lottoNumbersDiv.appendChild(numberSpan);
+        });
+      }
+
+      const generateBtn = document.getElementById('generate-btn');
+      generateBtn.addEventListener('click', generateLottoNumbers);
+    });
+  </script>
 </body>
 </html>
