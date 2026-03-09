@@ -1,253 +1,263 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="google-adsense-account" content="ca-pub-6653070561426309">
-  <title>Animal Face Test - Dog or Cat?</title>
-  <link href='style.css' rel='stylesheet'>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6653070561426309" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Discover your animal face type with our AI-powered test. High accuracy analysis for Dog and Cat types using Teachable Machine. Private and fun!">
+    <meta name="google-adsense-account" content="ca-pub-6653070561426309">
+    <title>Animal Face Test - Discover Your Dog or Cat Look-alike</title>
+    <link rel="stylesheet" href="style.css">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6653070561426309" crossorigin="anonymous"></script>
 </head>
 <body>
-  <button id="theme-toggle">🌙 Dark Mode</button>
-  
-  <div class="container">
-    <h1>🐶 Animal Face Test 🐱</h1>
-    <p class="subtitle">Am I a dog or a cat? Check your animal face type!</p>
-    
-    <div class="mode-toggle">
-      <button id="btn-upload" class="mode-btn active">📁 Upload Photo</button>
-      <button id="btn-webcam" class="mode-btn">🎥 Use Webcam</button>
-    </div>
 
-    <!-- Upload Section -->
-    <div id="upload-section">
-      <div class="upload-area" onclick="document.getElementById('file-input').click()">
-        <div id="upload-label">
-          <p>📸 Click or drag to upload your photo</p>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">🐾 AnimalFace.AI</a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="types-of-dog-faces.html">Dog Types</a>
+                <a href="types-of-cat-faces.html">Cat Types</a>
+                <a href="about.html">About</a>
+            </div>
+            <button id="theme-toggle" class="btn btn-secondary" style="padding: 5px 12px; font-size: 0.8rem;">🌙</button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- AdSense Slot (Top) -->
+        <div class="ad-container" style="margin-bottom: 20px;">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-6653070561426309"
+                 data-ad-slot="auto"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
         </div>
-        <img id="face-image" src="#" alt="your face" />
-        <input type='file' id="file-input" style="display:none;" onchange="readURL(this);" accept="image/*" />
-      </div>
-    </div>
 
-    <!-- Webcam Section -->
-    <div id="webcam-section" style="display:none;">
-      <div id="webcam-container"></div>
-      <button id="webcam-control-btn">Start Webcam</button>
-    </div>
+        <section class="card">
+            <h1>Animal Face Type Test</h1>
+            <p class="subtitle">Check your animal face type with Artificial Intelligence!</p>
 
-    <div id="loading" style="display:none;">Analyzing...</div>
+            <div class="btn-group">
+                <button id="btn-upload" class="btn">📁 Photo Upload</button>
+                <button id="btn-webcam" class="btn btn-secondary">🎥 Use Webcam</button>
+            </div>
 
-    <div id="result-message" style="font-size: 1.5rem; font-weight: bold; margin: 20px 0;"></div>
-    
-    <div class="result-container" id="label-container">
-      <!-- Result bars will be injected here -->
-    </div>
-  </div>
+            <div id="upload-section" class="tool-container" onclick="document.getElementById('file-input').click()">
+                <div id="upload-label">
+                    <p style="font-size: 3.5rem; margin: 10px 0;">🖼️</p>
+                    <p><strong>Click or Drag Photo Here</strong></p>
+                    <p style="font-size: 0.8rem; color: var(--text-light);">*Your photo is processed locally and never stored.</p>
+                </div>
+                <img id="face-image" src="#" alt="Analyzed face preview">
+                <input type="file" id="file-input" style="display:none;" onchange="readURL(this);" accept="image/*">
+            </div>
 
-  <!-- AdSense Unit 1 -->
-  <div style="margin: 20px 0; width: 100%; max-width: 600px;">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-6653070561426309"
-         data-ad-slot="auto"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
+            <div id="webcam-section" style="display:none;">
+                <div id="webcam-container"></div>
+                <button id="webcam-control-btn" class="btn">Start Camera</button>
+            </div>
+
+            <div id="loading" style="display:none; margin: 20px; font-weight: bold; color: var(--primary-color);">
+                ✨ AI is identifying your features...
+            </div>
+
+            <div id="result-message" style="font-size: 1.6rem; font-weight: 800; margin: 25px 0; color: var(--primary-color);"></div>
+            <div id="label-container"></div>
+            
+            <div id="share-container" style="display:none; margin-top: 20px;">
+                <button onclick="shareResult()" class="btn btn-secondary" style="font-size: 0.9rem;">🔗 Copy Share Link</button>
+            </div>
+        </section>
+
+        <!-- SEO Content: Structured for readability -->
+        <div class="card content-section">
+            <h2>Why Animal Face Types Matter?</h2>
+            <p>The concept of "Animal Face Types" (동물상) has become a global phenomenon, particularly in Korean fashion and beauty culture. It helps individuals understand their unique aesthetic and choose makeup, hairstyles, or clothing that complement their natural features.</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                <div class="card" style="padding: 15px; background: rgba(67, 97, 238, 0.05);">
+                    <h3 style="margin-top: 0;">🐶 The Dog Type</h3>
+                    <p style="font-size: 0.9rem;">Soft features and round eyes that exude friendliness and warmth.</p>
+                    <a href="types-of-dog-faces.html" style="font-size: 0.8rem; font-weight: bold;">Learn More →</a>
+                </div>
+                <div class="card" style="padding: 15px; background: rgba(58, 134, 255, 0.05);">
+                    <h3 style="margin-top: 0;">🐱 The Cat Type</h3>
+                    <p style="font-size: 0.9rem;">Sharp, elegant features and chic eyes that project confidence.</p>
+                    <a href="types-of-cat-faces.html" style="font-size: 0.8rem; font-weight: bold;">Learn More →</a>
+                </div>
+            </div>
+        </div>
+
+        <section class="card content-section">
+            <h2>Expert AI Analysis</h2>
+            <p>Our algorithm is built on <strong>Deep Learning</strong>. We analyze thousands of pixel data points to provide a statistical probability of your animal type. While it's meant for entertainment, the underlying technology is similar to that used in professional biometric analysis.</p>
+        </section>
+
+        <!-- Bonus: Interactive Lucky Numbers -->
+        <section class="card">
+            <h3>🎰 Lucky Number Generator</h3>
+            <p style="font-size: 0.9rem; margin-bottom: 20px;">Based on your unique animal energy today!</p>
+            <div id="lotto-numbers" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; min-height: 40px;"></div>
+            <button id="generate-btn" class="btn btn-secondary">Get Lucky Numbers</button>
+        </section>
+
+        <!-- AdSense Slot (Bottom) -->
+        <div class="ad-container" style="margin-top: 20px;">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-6653070561426309"
+                 data-ad-slot="auto"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="footer-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms of Service</a>
+        </div>
+        <p style="margin-top: 20px; font-size: 0.8rem;">&copy; 2026 AnimalFace.AI. Powered by Google AI Technology.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
     <script>
-         (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
-  </div>
+        const URL = "https://teachablemachine.withgoogle.com/models/dQxVSjCDx/";
+        let model, webcam, maxPredictions;
+        let isWebcamRunning = false;
 
-  <section class="lotto-section">
-    <h3>🔮 Bonus: Lucky Lotto Numbers</h3>
-    <div id="lotto-numbers"></div>
-    <button id="generate-btn">Generate Numbers</button>
-  </section>
+        async function init() {
+            const modelURL = URL + "model.json";
+            const metadataURL = URL + "metadata.json";
+            model = await tmImage.load(modelURL, metadataURL);
+            maxPredictions = model.getTotalClasses();
+        }
 
-  <section class="contact-section">
-    <h2>🤝 Partnership Inquiry</h2>
-    <form action="https://formspree.io/f/mzdjpbnv" method="POST">
-      <div class="form-group">
-        <label for="email">Email Address</label>
-        <input type="email" name="email" id="email" placeholder="your@email.com" required>
-      </div>
-      <div class="form-group">
-        <label for="message">Message</label>
-        <textarea name="message" id="message" placeholder="How can we work together?" required></textarea>
-      </div>
-      <button type="submit">Send Message</button>
-    </form>
-  </section>
+        async function predict(inputSource) {
+            const prediction = await model.predict(inputSource || document.getElementById("face-image"));
+            displayResults(prediction);
+        }
 
-  <section class="comments-section">
-    <div id="disqus_thread"></div>
-    <script>
-        (function() { 
-        var d = document, s = d.createElement('script');
-        s.src = 'https://productbuilder-c4pzu0tqz8.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-        })();
-    </script>
-  </section>
+        function displayResults(prediction) {
+            const container = document.getElementById("label-container");
+            container.innerHTML = '';
+            prediction.sort((a, b) => b.probability - a.probability);
 
-  <script>
-    const URL = "https://teachablemachine.withgoogle.com/models/dQxVSjCDx/";
-    let model, webcam, labelContainer, maxPredictions;
-    let isWebcamRunning = false;
+            const topResult = prediction[0].className;
+            document.getElementById("result-message").innerText = `You look like a ${topResult}!`;
+            document.getElementById("share-container").style.display = "block";
 
-    // Load the image model
-    async function init() {
-      const modelURL = URL + "model.json";
-      const metadataURL = URL + "metadata.json";
-      model = await tmImage.load(modelURL, metadataURL);
-      maxPredictions = model.getTotalClasses();
-    }
+            prediction.forEach(p => {
+                const prob = (p.probability * 100).toFixed(1);
+                const row = document.createElement("div");
+                row.className = "result-item";
+                row.innerHTML = `
+                    <div class="label-row"><span>${p.className}</span><span>${prob}%</span></div>
+                    <div class="result-bar">
+                        <div class="result-fill" style="width: ${prob}%; background-color: ${p.className === 'Dog' ? '#ffb703' : '#3a86ff'}"></div>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
 
-    async function predict(inputSource) {
-      const prediction = await model.predict(inputSource || document.getElementById("face-image"));
-      displayResults(prediction);
-    }
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById('face-image');
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                    document.getElementById('upload-label').style.display = 'none';
+                    document.getElementById('loading').style.display = 'block';
+                    setTimeout(async () => {
+                        await predict();
+                        document.getElementById('loading').style.display = 'none';
+                    }, 100);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
 
-    function displayResults(prediction) {
-      const resultContainer = document.getElementById("label-container");
-      resultContainer.innerHTML = '';
-      
-      prediction.sort((a, b) => b.probability - a.probability);
-      
-      document.getElementById("result-message").innerText = `You look like a ${prediction[0].className}!`;
+        async function toggleWebcam() {
+            if (isWebcamRunning) {
+                await webcam.stop();
+                document.getElementById('webcam-container').innerHTML = "";
+                document.getElementById('webcam-control-btn').innerText = "Start Camera";
+                isWebcamRunning = false;
+            } else {
+                webcam = new tmImage.Webcam(200, 200, true); 
+                await webcam.setup(); 
+                await webcam.play();
+                window.requestAnimationFrame(loop);
+                document.getElementById("webcam-container").appendChild(webcam.canvas);
+                document.getElementById('webcam-control-btn').innerText = "Stop Camera";
+                isWebcamRunning = true;
+            }
+        }
 
-      for (let i = 0; i < maxPredictions; i++) {
-        const classPrediction = prediction[i].className;
-        const probability = (prediction[i].probability * 100).toFixed(0);
-        
-        const barWrapper = document.createElement("div");
-        barWrapper.className = "result-bar-wrapper";
-        
-        const colorClass = classPrediction.toLowerCase() === 'dog' ? 'dog-bar' : 'cat-bar';
-        
-        barWrapper.innerHTML = `
-          <div class="label-container">
-            <span>${classPrediction}</span>
-            <span>${probability}%</span>
-          </div>
-          <div class="bar-bg">
-            <div class="bar-fill ${colorClass}" style="width: ${probability}%"></div>
-          </div>
-        `;
-        resultContainer.appendChild(barWrapper);
-      }
-    }
+        async function loop() {
+            if(isWebcamRunning) {
+                webcam.update(); 
+                await predict(webcam.canvas);
+                window.requestAnimationFrame(loop);
+            }
+        }
 
-    // Webcam Logic
-    async function setupWebcam() {
-      const flip = true; 
-      webcam = new tmImage.Webcam(200, 200, flip); 
-      await webcam.setup(); 
-      await webcam.play();
-      window.requestAnimationFrame(loop);
+        function shareResult() {
+            navigator.clipboard.writeText(window.location.href);
+            alert("Link copied! Share it with your friends.");
+        }
 
-      document.getElementById("webcam-container").appendChild(webcam.canvas);
-      document.getElementById("webcam-container").style.display = "block";
-    }
+        document.addEventListener('DOMContentLoaded', () => {
+            init();
+            
+            const btnUpload = document.getElementById('btn-upload');
+            const btnWebcam = document.getElementById('btn-webcam');
+            
+            btnUpload.addEventListener('click', () => {
+                if(isWebcamRunning) toggleWebcam();
+                document.getElementById('upload-section').style.display = 'block';
+                document.getElementById('webcam-section').style.display = 'none';
+                btnUpload.classList.remove('btn-secondary');
+                btnWebcam.classList.add('btn-secondary');
+            });
 
-    async function loop() {
-      if (!isWebcamRunning) return;
-      webcam.update(); 
-      await predict(webcam.canvas);
-      window.requestAnimationFrame(loop);
-    }
+            btnWebcam.addEventListener('click', () => {
+                document.getElementById('upload-section').style.display = 'none';
+                document.getElementById('webcam-section').style.display = 'block';
+                btnWebcam.classList.remove('btn-secondary');
+                btnUpload.classList.add('btn-secondary');
+            });
 
-    async function toggleWebcam() {
-      const btn = document.getElementById("webcam-control-btn");
-      if (!isWebcamRunning) {
-        btn.innerText = "Loading...";
-        await setupWebcam();
-        isWebcamRunning = true;
-        btn.innerText = "Stop Webcam";
-      } else {
-        isWebcamRunning = false;
-        webcam.stop();
-        document.getElementById("webcam-container").innerHTML = "";
-        document.getElementById("webcam-container").style.display = "none";
-        btn.innerText = "Start Webcam";
-        document.getElementById("result-message").innerText = "";
-        document.getElementById("label-container").innerHTML = "";
-      }
-    }
+            document.getElementById('webcam-control-btn').addEventListener('click', toggleWebcam);
+            
+            document.getElementById('theme-toggle').addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                document.getElementById('theme-toggle').innerText = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+            });
 
-    function readURL(input) {
-      if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-          const img = document.getElementById('face-image');
-          img.src = e.target.result;
-          img.style.display = 'block';
-          document.getElementById('upload-label').style.display = 'none';
-          
-          document.getElementById('loading').style.display = 'block';
-          predict().then(() => {
-            document.getElementById('loading').style.display = 'none';
-          });
-        };
-        reader.readAsDataURL(input.files[0]);
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', (event) => {
-      init();
-
-      // Mode toggle logic
-      const btnUpload = document.getElementById('btn-upload');
-      const btnWebcam = document.getElementById('btn-webcam');
-      const uploadSection = document.getElementById('upload-section');
-      const webcamSection = document.getElementById('webcam-section');
-
-      btnUpload.addEventListener('click', () => {
-        if (isWebcamRunning) toggleWebcam();
-        btnUpload.classList.add('active');
-        btnWebcam.classList.remove('active');
-        uploadSection.style.display = 'block';
-        webcamSection.style.display = 'none';
-        document.getElementById("result-message").innerText = "";
-        document.getElementById("label-container").innerHTML = "";
-      });
-
-      btnWebcam.addEventListener('click', () => {
-        btnWebcam.classList.add('active');
-        btnUpload.classList.remove('active');
-        uploadSection.style.display = 'none';
-        webcamSection.style.display = 'block';
-        document.getElementById("result-message").innerText = "";
-        document.getElementById("label-container").innerHTML = "";
-      });
-
-      document.getElementById("webcam-control-btn").addEventListener('click', toggleWebcam);
-
-      // Theme toggle logic
-      const themeToggle = document.getElementById('theme-toggle');
-      themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        themeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️ White Mode' : '🌙 Dark Mode';
-      });
-
-      // Lotto logic
-      const generateBtn = document.getElementById('generate-btn');
-      generateBtn.addEventListener('click', () => {
-        const numbers = new Set();
-        while(numbers.size < 6) { numbers.add(Math.floor(Math.random() * 45) + 1); }
-        const div = document.getElementById('lotto-numbers');
-        div.innerHTML = ''; 
-        Array.from(numbers).sort((a,b) => a-b).forEach(n => {
-          const s = document.createElement('span');
-          s.textContent = n; s.className = 'lotto-number';
-          div.appendChild(s);
+            document.getElementById('generate-btn').addEventListener('click', () => {
+                const numbers = new Set();
+                while(numbers.size < 6) numbers.add(Math.floor(Math.random() * 45) + 1);
+                const container = document.getElementById('lotto-numbers');
+                container.innerHTML = '';
+                Array.from(numbers).sort((a,b)=>a-b).forEach(n => {
+                    const circle = document.createElement('div');
+                    circle.style.cssText = "width:35px;height:35px;border-radius:50%;background:var(--primary-color);color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:0.9rem;";
+                    circle.innerText = n;
+                    container.appendChild(circle);
+                });
+            });
         });
-      });
-    });
-  </script>
+    </script>
 </body>
 </html>
